@@ -47,13 +47,31 @@ public class DataTableUtil : ModuleRules
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
-		
-		
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
+
+
+        DynamicallyLoadedModuleNames.AddRange(
+            new string[]
+            {
 				// ... add any modules that your module loads dynamically here ...
 			}
-			);
-	}
+            );
+
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EditorStyle" });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
+        PrivateDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "EditorStyle",
+                "KismetCompiler",
+                "UnrealEd",
+                "GraphEditor",
+                "Kismet",
+                "BlueprintGraph",
+                "DataTableUtil",
+            }
+        );
+    }
 }
