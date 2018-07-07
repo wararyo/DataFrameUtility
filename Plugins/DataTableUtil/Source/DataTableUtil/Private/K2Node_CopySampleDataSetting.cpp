@@ -16,14 +16,12 @@
 
 struct FK2Node_CopySampleDataSettingHelper
 {
-	static FString ClassPinName;
-	static FString TargetPinName;
-	static FString SettingPinName;
+	static FString DataTablePinName;
+	static FString RowIndexPinName;
 };
 
-FString FK2Node_CopySampleDataSettingHelper::ClassPinName(TEXT("Class"));
-FString FK2Node_CopySampleDataSettingHelper::TargetPinName(TEXT("Target"));
-FString FK2Node_CopySampleDataSettingHelper::SettingPinName(TEXT("Setting"));
+FString FK2Node_CopySampleDataSettingHelper::DataTablePinName(TEXT("DataTable"));
+FString FK2Node_CopySampleDataSettingHelper::RowIndexPinName(TEXT("Index"));
 
 UK2Node_CopySampleDataSetting::UK2Node_CopySampleDataSetting(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -42,9 +40,18 @@ void UK2Node_CopySampleDataSetting::AllocateDefaultPins()
 	// 出力実行ピン
 	CreatePin(EGPD_Output, K2Schema->PC_Exec, TEXT(""), NULL, false, false, K2Schema->PN_Then);
 
-	// コピー対象クラス
-	UEdGraphPin* ClassPin = CreatePin(EGPD_Input, K2Schema->PC_Class, TEXT(""), GetClassPinBaseClass(), false, false, FK2Node_CopySampleDataSettingHelper::ClassPinName);
-	SetPinToolTip(*ClassPin, LOCTEXT("ClassPinDescription", "コピー対象クラス"));
+	// Add DataTable pin
+	UEdGraphPin* DataTablePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UDataTable::StaticClass(), FK2Node_CopySampleDataSettingHelper::DataTablePinName);
+	SetPinToolTip(*DataTablePin, LOCTEXT("DataTablePinDescription", "The DataTable you want to retreive a row from"));
+
+	// Row Index pin
+	UEdGraphPin* RowNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Int, FK2Node_CopySampleDataSettingHelper::RowIndexPinName);
+	SetPinToolTip(*RowNamePin, LOCTEXT("RowNamePinDescription", "The name of the row to retrieve from the DataTable"));
+
+	// Result pin
+	UEdGraphPin* ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, UEdGraphSchema_K2::PN_ReturnValue);
+	ResultPin->PinFriendlyName = LOCTEXT("GetDataTableRow Output Row", "Out Row");
+	SetPinToolTip(*ResultPin, LOCTEXT("ResultPinDescription", "The returned TableRow, if found"));
 
 	Super::AllocateDefaultPins();
 }

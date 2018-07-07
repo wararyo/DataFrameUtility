@@ -36,4 +36,7 @@ class UDataTableUtilBPLibrary : public UBlueprintFunctionLibrary
 	static float DataTableUtilSampleFunction(float param) {
 		return -1;
 	}
+
+	//UFUNCTION(BlueprintCallable, Category = "データテーブル", meta = (BlueprintInternalUseOnly = "true"))
+	//static FTableRowBase* GetDataTableRowFromIndex(UDataTable* table, int index);
 };
